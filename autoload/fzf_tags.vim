@@ -52,7 +52,9 @@ function! s:align_lists(lists)
 endfunction
 
 function! s:sink(selection)
-  execute 'tag' split(a:selection)[1]
+  let l:count = split(a:selection)[0]
+  let identifier = split(a:selection)[1]
+  execute l:count . 'tag' identifier
 endfunction
 
 function! s:green(s)
