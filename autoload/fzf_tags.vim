@@ -5,16 +5,15 @@ function! fzf_tags#Find(keyword)
     echohl WarningMsg
     echo 'Tag not found: ' . a:keyword
     echohl None
-    return
   elseif len(source_lines) == 1
     execute 'tag' a:keyword
-    return
+  else
+    call fzf#run({
+    \   'source': source_lines,
+    \   'sink':   function('s:sink'),
+    \ })
   endif
 
-  call fzf#run({
-  \   'source': source_lines,
-  \   'sink':   function('s:sink'),
-  \ })
 endfunction
 
 function! s:source_lines(keyword)
