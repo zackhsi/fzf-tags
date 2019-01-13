@@ -11,6 +11,7 @@ function! fzf_tags#Find(keyword)
     call fzf#run({
     \   'source': source_lines,
     \   'sink':   function('s:sink'),
+    \   'options': '--ansi',
     \ })
   endif
 
@@ -25,13 +26,13 @@ function! s:source_lines(keyword)
 endfunction
 
 function! s:tag_to_string(index, tag_dict)
-  let components = [a:index + 1, a:tag_dict['name']]
+  let components = [a:index + 1, s:blue(a:tag_dict['name'])]
   call add(components, "\n")
   if has_key(a:tag_dict, 'class')
-    call add(components, a:tag_dict['class'])
+    call add(components, s:green(a:tag_dict['class']))
   endif
   if has_key(a:tag_dict, 'filename')
-    call add(components, a:tag_dict['filename'])
+    call add(components, s:magenta(a:tag_dict['filename']))
   endif
   return components
 endfunction
@@ -53,4 +54,14 @@ endfunction
 
 function! s:sink(selection)
   execute 'tag' split(a:selection)[1]
+endfunction
+
+function! s:green(s)
+  return "\033[32m" . a:s . "\033[m"
+endfunction
+function! s:blue(s)
+  return "\033[34m" . a:s . "\033[m"
+endfunction
+function! s:magenta(s)
+  return "\033[35m" . a:s . "\033[m"
 endfunction
