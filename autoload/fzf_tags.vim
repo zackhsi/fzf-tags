@@ -12,6 +12,7 @@ function! fzf_tags#Find(keyword)
     \   'source': source_lines,
     \   'sink':   function('s:sink'),
     \   'options': '--ansi',
+    \   'down': '40%',
     \ })
   endif
 
