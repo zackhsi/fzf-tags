@@ -22,12 +22,11 @@ function! s:source_lines(keyword)
   \   taglist('^' . a:keyword . '$', expand('%:p')),
   \   function('s:tag_to_string')
   \ )
-  return map(s:align_lists(relevant_fields), 'join(v:val, "\t")')
+  return map(s:align_lists(relevant_fields), 'join(v:val, " ")')
 endfunction
 
 function! s:tag_to_string(index, tag_dict)
   let components = [a:index + 1, s:blue(a:tag_dict['name'])]
-  call add(components, "\n")
   if has_key(a:tag_dict, 'class')
     call add(components, s:green(a:tag_dict['class']))
   endif
