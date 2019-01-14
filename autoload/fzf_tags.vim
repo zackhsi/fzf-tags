@@ -27,12 +27,15 @@ function! s:source_lines(keyword)
 endfunction
 
 function! s:tag_to_string(index, tag_dict)
-  let components = [a:index + 1, s:blue(a:tag_dict['name'])]
+  let components = [a:index + 1, s:blue_bold(a:tag_dict['name'])]
   if has_key(a:tag_dict, 'class')
     call add(components, s:green(a:tag_dict['class']))
   endif
   if has_key(a:tag_dict, 'filename')
     call add(components, s:magenta(a:tag_dict['filename']))
+  endif
+  if has_key(a:tag_dict, 'cmd')
+    call add(components, s:cyan(a:tag_dict['cmd']))
   endif
   return components
 endfunction
@@ -61,9 +64,12 @@ endfunction
 function! s:green(s)
   return "\033[32m" . a:s . "\033[m"
 endfunction
-function! s:blue(s)
-  return "\033[34m" . a:s . "\033[m"
+function! s:blue_bold(s)
+  return "\033[34;1m" . a:s . "\033[m"
 endfunction
 function! s:magenta(s)
   return "\033[35m" . a:s . "\033[m"
+endfunction
+function! s:cyan(s)
+  return "\033[36m" . a:s . "\033[m"
 endfunction
