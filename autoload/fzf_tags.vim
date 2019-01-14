@@ -11,7 +11,7 @@ function! fzf_tags#Find(keyword)
     call fzf#run({
     \   'source': source_lines,
     \   'sink':   function('s:sink'),
-    \   'options': '--ansi --no-sort',
+    \   'options': '--ansi --no-sort --tiebreak index',
     \   'down': '40%',
     \ })
   endif
