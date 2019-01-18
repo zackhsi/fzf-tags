@@ -1,41 +1,41 @@
-function! fzf_tags#Find(keyword)
-  let source_lines = s:source_lines(a:keyword)
+function! fzf_tags#Find(identifier)
+  let source_lines = s:source_lines(a:identifier)
 
   if len(source_lines) == 0
     echohl WarningMsg
-    echo 'Tag not found: ' . a:keyword
+    echo 'Tag not found: ' . a:identifier
     echohl None
   elseif len(source_lines) == 1
-    execute 'tag' a:keyword
+    execute 'tag' a:identifier
   else
     call fzf#run({
     \   'source': source_lines,
-    \   'sink':   function('s:sink'),
-    \   'options': '--ansi --no-sort --tiebreak index',
+    \   'sink':   function('s:sink', [a:identifier]),
+    \   'options': '--ansi --no-sort --tiebreak index --prompt "Tag:' . a:identifier . '> "',
     \   'down': '40%',
     \ })
   endif
 
 endfunction
 
-function! s:source_lines(keyword)
+function! s:source_lines(identifier)
   let relevant_fields = map(
-  \   taglist('^' . a:keyword . '$', expand('%:p')),
+  \   taglist('^' . a:identifier . '$', expand('%:p')),
   \   function('s:tag_to_string')
   \ )
   return map(s:align_lists(relevant_fields), 'join(v:val, " ")')
 endfunction
 
 function! s:tag_to_string(index, tag_dict)
-  let components = [a:index + 1, s:blue_bold(a:tag_dict['name'])]
-  if has_key(a:tag_dict, 'class')
-    call add(components, s:green(a:tag_dict['class']))
-  endif
+  let components = [a:index + 1]
   if has_key(a:tag_dict, 'filename')
     call add(components, s:magenta(a:tag_dict['filename']))
   endif
+  if has_key(a:tag_dict, 'class')
+    call add(components, s:green(a:tag_dict['class']))
+  endif
   if has_key(a:tag_dict, 'cmd')
-    call add(components, s:cyan(a:tag_dict['cmd']))
+    call add(components, s:red(a:tag_dict['cmd']))
   endif
   return components
 endfunction
@@ -55,21 +55,17 @@ function! s:align_lists(lists)
   return a:lists
 endfunction
 
-function! s:sink(selection)
+function! s:sink(identifier, selection)
   let l:count = split(a:selection)[0]
-  let identifier = split(a:selection)[1]
-  execute l:count . 'tag' identifier
+  execute l:count . 'tag' a:identifier
 endfunction
 
 function! s:green(s)
   return "\033[32m" . a:s . "\033[m"
 endfunction
-function! s:blue_bold(s)
-  return "\033[34;1m" . a:s . "\033[m"
-endfunction
 function! s:magenta(s)
   return "\033[35m" . a:s . "\033[m"
 endfunction
-function! s:cyan(s)
-  return "\033[36m" . a:s . "\033[m"
+function! s:red(s)
+  return "\033[31m" . a:s . "\033[m"
 endfunction
