@@ -11,7 +11,7 @@ function! fzf_tags#Find(identifier)
     call fzf#run({
     \   'source': source_lines,
     \   'sink':   function('s:sink', [a:identifier]),
-    \   'options': '--ansi --no-sort --tiebreak index --prompt "Tag:' . a:identifier . '> "',
+    \   'options': '--ansi --no-sort --tiebreak index --prompt " 🔎 \"' . a:identifier . '\" > "',
     \   'down': '40%',
     \ })
   endif
