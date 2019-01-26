@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 function! fzf_tags#Find(identifier)
   let source_lines = s:source_lines(a:identifier)
 
