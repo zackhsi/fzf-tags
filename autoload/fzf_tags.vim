@@ -1,5 +1,10 @@
 scriptencoding utf-8
 
+let s:actions = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
 function! fzf_tags#Find(identifier)
   let identifier = s:strip_leading_bangs(a:identifier)
   let source_lines = s:source_lines(identifier)
@@ -11,10 +16,11 @@ function! fzf_tags#Find(identifier)
   elseif len(source_lines) == 1
     execute 'tag' identifier
   else
+    let expect_keys = join(keys(s:actions), ',')
     call fzf#run({
     \   'source': source_lines,
-    \   'sink':   function('s:sink', [identifier]),
-    \   'options': '--ansi --no-sort --tiebreak index --prompt " 🔎 \"' . identifier . '\" > "',
+    \   'sink*':   function('s:sink', [identifier]),
+    \   'options': '--expect=' . expect_keys . ' --ansi --no-sort --tiebreak index --prompt " 🔎 \"' . identifier . '\" > "',
     \   'down': '40%',
     \ })
   endif
@@ -66,7 +72,16 @@ function! s:align_lists(lists)
 endfunction
 
 function! s:sink(identifier, selection)
-  let l:count = split(a:selection)[0]
+  let selected_with_key = a:selection[0]
+  let selected_text = a:selection[1]
+
+  " Open new split or tab.
+  if has_key(s:actions, selected_with_key)
+    execute 'silent' s:actions[selected_with_key]
+  endif
+
+  " Go to tag!
+  let l:count = split(selected_text)[0]
   execute l:count . 'tag' a:identifier
 endfunction
 
