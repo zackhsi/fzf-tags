@@ -5,6 +5,10 @@ let s:actions = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
+function! fzf_tags#FindCommand(identifier)
+  return fzf_tags#Find(empty(a:identifier) ? expand('<cword>') : a:identifier)
+endfunction
+
 function! fzf_tags#Find(identifier)
   let identifier = s:strip_leading_bangs(a:identifier)
   let source_lines = s:source_lines(identifier)
