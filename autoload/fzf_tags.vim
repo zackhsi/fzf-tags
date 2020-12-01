@@ -5,6 +5,17 @@ let s:actions = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
+function! fzf_tags#SelectCommand(identifier)
+  let identifier = empty(a:identifier) ? s:tagstack_head() : a:identifier
+  if empty(identifier)
+    echohl Error
+    echo "Tag stack empty"
+    echohl None
+  else
+    call fzf_tags#Find(identifier)
+  endif
+endfunction
+
 function! fzf_tags#FindCommand(identifier)
   return fzf_tags#Find(empty(a:identifier) ? expand('<cword>') : a:identifier)
 endfunction
@@ -28,6 +39,11 @@ function! fzf_tags#Find(identifier)
     \   'down': '40%',
     \ })
   endif
+endfunction
+
+function! s:tagstack_head()
+  let stack = gettagstack()
+  return stack.length != 0 ? stack.items[-1].tagname : ""
 endfunction
 
 function! s:strip_leading_bangs(identifier)
