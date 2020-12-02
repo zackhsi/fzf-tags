@@ -33,3 +33,9 @@ To override the default jump-to-tag binding:
 ```vim
 nmap <C-]> <Plug>(fzf_tags)
 ```
+
+Additionally, `fzf-tags` exposes a fuzzy `:tselect`. To replace the default `:ts`:
+
+```vim
+noreabbrev <expr> ts getcmdtype() == ":" && getcmdline() == 'ts' ? 'FZFTselect' : 'ts'
+```
