@@ -1,5 +1,9 @@
 scriptencoding utf-8
 
+if !exists('g:fzf_tags_prompt')
+  let g:fzf_tags_prompt = ' 🔎 '
+endif
+
 let s:actions = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
@@ -32,9 +36,6 @@ function! fzf_tags#Find(identifier)
     execute 'tag' identifier
   else
     let expect_keys = join(keys(s:actions), ',')
-    if !exists('g:fzf_tags_prompt')
-      let g:fzf_tags_prompt = ' 🔎 '
-    endif
     call fzf#run({
     \   'source': source_lines,
     \   'sink*':   function('s:sink', [identifier]),
