@@ -1,5 +1,9 @@
 scriptencoding utf-8
 
+if !exists('g:fzf_tags_prompt')
+  let g:fzf_tags_prompt = ' 🔎 '
+endif
+
 let s:actions = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
@@ -35,7 +39,7 @@ function! fzf_tags#Find(identifier)
     call fzf#run({
     \   'source': source_lines,
     \   'sink*':   function('s:sink', [identifier]),
-    \   'options': '--expect=' . expect_keys . ' --ansi --no-sort --tiebreak index --prompt " 🔎 \"' . identifier . '\" > "',
+    \   'options': '--expect=' . expect_keys . ' --ansi --no-sort --tiebreak index --prompt "' . g:fzf_tags_prompt . '\"' . identifier . '\" > "',
     \   'down': '40%',
     \ })
   endif
