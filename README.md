@@ -44,3 +44,9 @@ Additionally, `fzf-tags` exposes a fuzzy `:tselect`. To replace the default `:ts
 ```vim
 noreabbrev <expr> ts getcmdtype() == ":" && getcmdline() == 'ts' ? 'FZFTselect' : 'ts'
 ```
+
+To replace the default prompt `🔎`:
+
+```vim
+let g:fzf_tags_prompt = "Gd "
+```
