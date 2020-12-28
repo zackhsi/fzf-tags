@@ -21,7 +21,7 @@ function! fzf_tags#SelectCommand(identifier)
 endfunction
 
 function! fzf_tags#FindCommand(identifier)
-  return fzf_tags#Find(empty(a:identifier) ? expand('<cword>') : a:identifier)
+  return fzf_tags#Find(empty(a:identifier) ? s:get_identifier() : a:identifier)
 endfunction
 
 function! fzf_tags#Find(identifier)
@@ -107,6 +107,13 @@ function! s:sink(identifier, selection)
   " Go to tag!
   let l:count = split(selected_text)[0]
   execute l:count . 'tag' a:identifier
+endfunction
+
+" Get identifier like: is_it_method? instead of is_it_method
+function! s:get_identifier()
+  let suffix_symbols = '!?'
+  let identifier_pattern = '\' . expand('<cword>') . '[' .suffix_symbols . ']' . '\|' . expand('<cword>')
+  return matchstr(expand('<cWORD>'), identifier_pattern)
 endfunction
 
 function! s:green(s)
