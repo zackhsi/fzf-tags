@@ -50,3 +50,15 @@ To replace the default prompt `🔎`:
 ```vim
 let g:fzf_tags_prompt = "Gd "
 ```
+
+Fzf-tags inherits layout configuration from `fzf.vim`, but if you want a different layout from `fzf.vim`:
+```
+let g:fzf_tags_layout = { 
+  \ 'window': {
+    \ 'width': 0.7,
+    \ 'height': 0.5,
+    \ 'xoffset': 0.5,
+    \ 'yoffset': 0.7 
+    \ }
+  \ }
+```

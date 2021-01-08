@@ -9,6 +9,8 @@ let s:actions = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
+let s:default_layout = { 'down': '~40%' }
+
 function! fzf_tags#SelectCommand(identifier)
   let identifier = empty(a:identifier) ? s:tagstack_head() : a:identifier
   if empty(identifier)
@@ -36,12 +38,11 @@ function! fzf_tags#Find(identifier)
     execute 'tag' identifier
   else
     let expect_keys = join(keys(s:actions), ',')
-    call fzf#run({
+    call fzf#run(extend({
     \   'source': source_lines,
     \   'sink*':   function('s:sink', [identifier]),
-    \   'options': '--expect=' . expect_keys . ' --ansi --no-sort --tiebreak index --prompt "' . g:fzf_tags_prompt . '\"' . identifier . '\" > "',
-    \   'down': '40%',
-    \ })
+    \   'options': '--expect=' . expect_keys . ' --ansi --no-sort --tiebreak index --prompt "' . g:fzf_tags_prompt . '\"' . identifier . '\" > "'
+    \ }, s:layout()))
   endif
 endfunction
 
@@ -117,4 +118,9 @@ function! s:magenta(s)
 endfunction
 function! s:red(s)
   return "\033[31m" . a:s . "\033[m"
+endfunction
+
+" Take fzf_layout config as default if found it
+function! s:layout()
+  return copy(get(g:, 'fzf_tags_layout', get(g:, 'fzf_layout', s:default_layout)))
 endfunction
