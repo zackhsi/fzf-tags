@@ -1,8 +1,10 @@
 scriptencoding utf-8
 
-if !exists('g:fzf_tags_prompt')
-  let g:fzf_tags_prompt = ' 🔎 '
-endif
+let s:default_fzf_tags_prompt = ' 🔎 '
+let s:fzf_tags_prompt = get(g:, 'fzf_tags_prompt', s:default_fzf_tags_prompt)
+
+let s:default_fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+let s:fzf_layout = get(g:, 'fzf_layout', s:default_fzf_layout)
 
 let s:actions = {
   \ 'ctrl-t': 'tab split',
@@ -36,12 +38,13 @@ function! fzf_tags#Find(identifier)
     execute 'tag' identifier
   else
     let expect_keys = join(keys(s:actions), ',')
-    call fzf#run({
-    \   'source': source_lines,
-    \   'sink*':   function('s:sink', [identifier]),
-    \   'options': '--expect=' . expect_keys . ' --ansi --no-sort --tiebreak index --prompt "' . g:fzf_tags_prompt . '\"' . identifier . '\" > "',
-    \   'down': '40%',
-    \ })
+    let run_spec = {
+          \ 'source': source_lines,
+          \ 'sink*': function('s:sink', [identifier]),
+          \ 'options': '--expect=' . expect_keys . ' --ansi --no-sort --tiebreak index --prompt "' . s:fzf_tags_prompt . '\"' . identifier . '\" > "',
+          \ }
+    let final_run_spec = extend(run_spec, s:fzf_layout)
+    call fzf#run(final_run_spec)
   endif
 endfunction
 
