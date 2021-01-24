@@ -31,6 +31,8 @@ Plug 'zackhsi/fzf-tags'
 Configuration
 -------------
 
+### Mappings
+
 `fzf-tags` exposes the `<Plug>(fzf_tags)` mapping.
 
 To override the default jump-to-tag binding:
@@ -45,11 +47,15 @@ Additionally, `fzf-tags` exposes a fuzzy `:tselect`. To replace the default `:ts
 noreabbrev <expr> ts getcmdtype() == ":" && getcmdline() == 'ts' ? 'FZFTselect' : 'ts'
 ```
 
+### Prompt
+
 To replace the default prompt `🔎`:
 
 ```vim
 let g:fzf_tags_prompt = "Gd "
 ```
+
+### Layout
 
 `fzf-tags` respects the global
 [`g:fzf_layout`](https://github.com/junegunn/fzf/blob/master/README-VIM.md#configuration)
