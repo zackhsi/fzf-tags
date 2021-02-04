@@ -7,7 +7,8 @@ let s:actions = {
   \ }
 
 let s:preview_cmd = [
-  \'--preview-window="up:50%"',
+  \ '--with-nth 1,2,3',
+  \ '--preview-window="up:50%"',
   \ '--preview="',
   \ 'bat ',
   \ '--number',
@@ -37,7 +38,7 @@ function! fzf_tags#Find(identifier)
     call fzf#run({
     \   'source': source_lines,
     \   'sink*':   function('s:sink', [identifier]),
-    \   'options': preview_source_cmd . ' --expect=' . expect_keys . ' --with-nth 1,2,3 --ansi --no-sort --tiebreak index --prompt " � \"' . identifier . '\" > "',
+    \   'options': preview_source_cmd . ' --expect=' . expect_keys . '  --ansi --no-sort --tiebreak index --prompt " � \"' . identifier . '\" > "',
     \   'window': { 'width': 0.90, 'height': 0.90, 'border': 'sharp'} 
     \ })
   endif
